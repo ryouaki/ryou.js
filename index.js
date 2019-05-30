@@ -134,13 +134,9 @@ const root = new Ryou();
 const child = new Div();
 const child1 = new Input();
 const child2 = new CustomDiv();
-
 child.setValue('Hello world!');
-
 root.appendChild(child);
 root.appendChild(child1);
-
 root.appendChild(child2);
-
 const app = new App(root, '#root');
 app.render();
