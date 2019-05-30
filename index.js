@@ -27,6 +27,13 @@ class Ryou {
   appendChild(child) {
     this.children.push(child);
   }
+
+  mounted() {
+    this.afterMounted();
+    this.children.forEach((child) => {
+      child.mounted();
+    })
+  }
   
   beforeMount() {
 
@@ -45,6 +52,7 @@ class Ryou {
   }
 
   toElement() {
+    this.beforeMount();
     const ele = document.createElement(this.tag.toLowerCase());
     this.ele = ele;
     this.ele.value = this.value;
@@ -70,15 +78,16 @@ class Ryou {
     this.children.forEach((child) => {
       this.ele.appendChild(child.toElement());
     })
-
     return ele;
   }
 
   updateElement() {
+    this.beforeUpdate();
     const parentEle = this.ele.parentNode;
     const oldEle = this.ele;
     const newEle = this.toElement();
     parentEle.replaceChild(newEle, oldEle);
+    this.afterUpdated();
   }
 }
 
@@ -87,11 +96,18 @@ class Div extends Ryou {
     super();
     this.text = 'hello world'
   }
+  beforeMount() {
+    console.log('beforeMount')
+  }
 }
 
 class Input extends Ryou {
   constructor() {
     super();
+  }
+
+  afterMounted() {
+    console.log('afterMounted',this.ele)
   }
 }
 
@@ -127,6 +143,7 @@ class App {
   render() {
     const root = document.querySelector(this.rootDom);
     root.appendChild(this.rootElement.toElement());
+    this.rootElement.mounted();
   }
 }
 
