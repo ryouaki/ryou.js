@@ -14,6 +14,7 @@ class Ryou {
     this.value = '';
     this.html = '';
     this.text = '';
+    this.key = '';
   }
 
   setValue(value) {
