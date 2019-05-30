@@ -51,12 +51,20 @@ class Ryou {
 
   }
 
+  shouldUpdate() {
+    if (this.value != this.ele.value || this.text != this.ele.text) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   toElement() {
     this.beforeMount();
     const ele = document.createElement(this.tag.toLowerCase());
     this.ele = ele;
     this.ele.value = this.value;
-    this.ele.innerText = this.text;
+    this.ele.text = this.ele.innerText = this.text;
 
     const methodsFromProto = Object.getOwnPropertyNames(this.__proto__);
     const methodsFromObj = Object.keys(this);
@@ -83,10 +91,13 @@ class Ryou {
 
   updateElement() {
     this.beforeUpdate();
-    const parentEle = this.ele.parentNode;
-    const oldEle = this.ele;
-    const newEle = this.toElement();
-    parentEle.replaceChild(newEle, oldEle);
+    if (this.shouldUpdate()) {
+      this.ele.value = this.value;
+      this.ele.innerText = this.text;
+      this.children.forEach((child) => {
+        child.updateElement();
+      })
+    }
     this.afterUpdated();
   }
 }
